@@ -45,6 +45,37 @@ const revealObserver = new IntersectionObserver(entries => {
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
 /* ===== Typing effect ===== */
+const typedTextSpan = document.querySelector(".typed");
+const textArray = ["Web Developer", "UI/UX Designer", "Tech Enthusiast"];
+const typingDelay = 100;
+const erasingDelay = 50;
+const newTextDelay = 2000;
+let textArrayIndex = 0;
+let charIndex = 0;
+
+function type() {
+  if (charIndex < textArray[textArrayIndex].length) {
+    typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+    charIndex++;
+    setTimeout(type, typingDelay);
+  } else {
+    setTimeout(erase, newTextDelay);
+  }
+}
+
+function erase() {
+  if (charIndex > 0) {
+    typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
+    charIndex--;
+    setTimeout(erase, erasingDelay);
+  } else {
+    textArrayIndex++;
+    if (textArrayIndex >= textArray.length) textArrayIndex = 0;
+    setTimeout(type, typingDelay + 1100);
+  }
+}
+
+if (textArray.length && typedTextSpan) setTimeout(type, newTextDelay + 250);
 
 
 /* ===== Marquee ===== */
@@ -164,8 +195,8 @@ function renderProjects() {
         <p>${featured.description}</p>
         <div class="tag-row">${featured.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
         <div class="featured-actions">
-          <a href="#" class="btn btn-primary">Live demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a>
-          <a href="#" class="btn btn-ghost">Code <svg viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M12 .5C5.73.5.5 5.73.5 12.06c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.25.79-.56 0-.27-.01-1-.02-1.96-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.68.8.56A11.54 11.54 0 0 0 23.5 12.06C23.5 5.73 18.27.5 12 .5Z"/></svg></a>
+          <a href="javascript:void(0)" class="btn btn-primary">Live demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a>
+          <a href="javascript:void(0)" class="btn btn-ghost">Code <svg viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M12 .5C5.73.5.5 5.73.5 12.06c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.25.79-.56 0-.27-.01-1-.02-1.96-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.68.8.56A11.54 11.54 0 0 0 23.5 12.06C23.5 5.73 18.27.5 12 .5Z"/></svg></a>
         </div>
       </div>`;
     featuredWrap.appendChild(f);
@@ -185,8 +216,8 @@ function renderProjects() {
         <p>${p.description}</p>
         <div class="project-tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
         <div class="project-links">
-          <a href="#">Demo</a>
-          <a href="#">Code</a>
+          <a href="javascript:void(0)">Demo</a>
+          <a href="javascript:void(0)">Code</a>
         </div>
       </div>`;
     projectsGrid.appendChild(c);
