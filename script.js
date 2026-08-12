@@ -11,17 +11,14 @@ const navLinks = document.querySelectorAll('.nav-links a');
 const SECTIONS = ['home', 'about', 'skills', 'projects', 'education', 'contact'];
 
 function onScroll() {
-  // shrink navbar
   if (window.scrollY > 40) navbar.classList.add('scrolled');
   else navbar.classList.remove('scrolled');
 
-  // progress bar
   const h = document.documentElement;
   const pct = h.scrollHeight - h.clientHeight > 0
     ? (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100 : 0;
   document.getElementById('progressBar').style.width = pct + '%';
 
-  // active link
   const y = window.scrollY + 120;
   let current = SECTIONS[0];
   SECTIONS.forEach(id => {
@@ -43,40 +40,6 @@ const revealObserver = new IntersectionObserver(entries => {
   entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
 }, { threshold: 0.15 });
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-/* ===== Typing effect ===== */
-const typedTextSpan = document.querySelector(".typed");
-const textArray = ["Web Developer", "UI/UX Designer", "Tech Enthusiast"];
-const typingDelay = 100;
-const erasingDelay = 50;
-const newTextDelay = 2000;
-let textArrayIndex = 0;
-let charIndex = 0;
-
-function type() {
-  if (charIndex < textArray[textArrayIndex].length) {
-    typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
-    charIndex++;
-    setTimeout(type, typingDelay);
-  } else {
-    setTimeout(erase, newTextDelay);
-  }
-}
-
-function erase() {
-  if (charIndex > 0) {
-    typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex - 1);
-    charIndex--;
-    setTimeout(erase, erasingDelay);
-  } else {
-    textArrayIndex++;
-    if (textArrayIndex >= textArray.length) textArrayIndex = 0;
-    setTimeout(type, typingDelay + 1100);
-  }
-}
-
-if (textArray.length && typedTextSpan) setTimeout(type, newTextDelay + 250);
-
 
 /* ===== Marquee ===== */
 const MARQUEE = ['HTML','CSS','JavaScript','TypeScript','React','Tailwind','Node.js','Express','Python','PostgreSQL','MySQL','Git','Supabase','Figma','REST'];
@@ -123,7 +86,6 @@ SKILLS.forEach((g, gi) => {
   revealObserver.observe(card);
 });
 
-// animate bars when skills section is visible
 const skillsSec = document.getElementById('skills');
 const barObserver = new IntersectionObserver(entries => {
   entries.forEach(e => {
@@ -139,11 +101,6 @@ barObserver.observe(skillsSec);
 
 /* ===== Projects ===== */
 const PROJECTS = [
-  { title:'Campus LMS Portal', category:'Full-Stack',
-    description:'A learning management system for lecturers to publish course materials and students to submit assignments, take quizzes and track grades in real time.',
-    tags:['React','Node.js','PostgreSQL','Supabase'],
-    image:'https://images.pexels.com/photos/3888149/pexels-photo-3888149.jpeg?auto=compress&cs=tinysrgb&h=650&w=940',
-    featured:true },
   { title:'E-Commerce Storefront', category:'Web App',
     description:'A responsive online shop with product filtering, cart, Stripe checkout and an admin dashboard for managing inventory and orders.',
     tags:['React','Tailwind','Stripe','REST API'],
@@ -152,20 +109,12 @@ const PROJECTS = [
     description:'A polished, accessible UI kit for event discovery and booking — designed and prototyped in Figma, implemented in React.',
     tags:['Figma','React','Tailwind','A11y'],
     image:'https://images.pexels.com/photos/14553720/pexels-photo-14553720.jpeg?auto=compress&cs=tinysrgb&h=650&w=940' },
-  { title:'Fitness Tracker App', category:'Mobile',
-    description:'A cross-platform fitness companion that logs workouts, visualises progress with charts and sends motivational reminders.',
-    tags:['React Native','Charts','AsyncStorage'],
-    image:'https://images.pexels.com/photos/9858906/pexels-photo-9858906.jpeg?auto=compress&cs=tinysrgb&h=650&w=940' },
-  { title:'Library Inventory API', category:'Full-Stack',
-    description:'A RESTful API for a university library with JWT auth, book search, borrowing workflow and fine calculation — documented with Swagger.',
-    tags:['Node.js','Express','JWT','Swagger'],
-    image:'https://images.pexels.com/photos/2764993/pexels-photo-2764993.jpeg?auto=compress&cs=tinysrgb&h=650&w=940' },
   { title:'Portfolio Website', category:'Web App',
     description:'This very site — a fully responsive, animated portfolio built with pure HTML, CSS and JavaScript.',
     tags:['HTML','CSS','JavaScript','Responsive'],
     image:'https://images.pexels.com/photos/16023919/pexels-photo-16023919.jpeg?auto=compress&cs=tinysrgb&h=650&w=940' },
 ];
-const FILTERS = ['All','Web App','Full-Stack','UI/UX','Mobile'];
+const FILTERS = ['All','Web App','UI/UX'];
 const filtersEl = document.getElementById('filters');
 const featuredWrap = document.getElementById('featuredWrap');
 const projectsGrid = document.getElementById('projectsGrid');
@@ -174,36 +123,12 @@ const emptyMsg = document.getElementById('emptyMsg');
 let activeFilter = 'All';
 function renderProjects() {
   const list = activeFilter === 'All' ? PROJECTS : PROJECTS.filter(p => p.category === activeFilter);
-  const featured = list.find(p => p.featured);
-  const rest = list.filter(p => !p.featured);
 
   featuredWrap.innerHTML = '';
   projectsGrid.innerHTML = '';
   emptyMsg.hidden = list.length > 0;
 
-  if (featured) {
-    const f = document.createElement('div');
-    f.className = 'glass tilt featured reveal';
-    f.innerHTML = `
-      <div class="featured-img">
-        <img src="${featured.image}" alt="${featured.title}" />
-        <span class="featured-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon" style="width:.875rem;height:.875rem"><path d="M11.525 3.464a.5.5 0 0 1 .95 0l1.486 4.582a.5.5 0 0 0 .398.343l4.823.703a.5.5 0 0 1 .277.853l-3.49 3.4a.5.5 0 0 0-.143.443l.823 4.79a.5.5 0 0 1-.726.527l-4.317-2.27a.5.5 0 0 0-.466 0l-4.317 2.27a.5.5 0 0 1-.726-.527l.823-4.79a.5.5 0 0 0-.143-.443l-3.49-3.4a.5.5 0 0 1 .277-.853l4.823-.703a.5.5 0 0 0 .398-.343z"/></svg> Featured</span>
-      </div>
-      <div class="featured-body">
-        <span class="featured-cat">${featured.category}</span>
-        <h3>${featured.title}</h3>
-        <p>${featured.description}</p>
-        <div class="tag-row">${featured.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-        <div class="featured-actions">
-          <a href="javascript:void(0)" class="btn btn-primary">Live demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a>
-          <a href="javascript:void(0)" class="btn btn-ghost">Code <svg viewBox="0 0 24 24" fill="currentColor" class="icon"><path d="M12 .5C5.73.5.5 5.73.5 12.06c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.25.79-.56 0-.27-.01-1-.02-1.96-3.2.7-3.88-1.54-3.88-1.54-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.41-5.27 5.69.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.68.8.56A11.54 11.54 0 0 0 23.5 12.06C23.5 5.73 18.27.5 12 .5Z"/></svg></a>
-        </div>
-      </div>`;
-    featuredWrap.appendChild(f);
-    revealObserver.observe(f);
-  }
-
-  rest.forEach((p, i) => {
+  list.forEach((p, i) => {
     const c = document.createElement('div');
     c.className = 'glass tilt project-card reveal' + (i ? ' d' + Math.min(i, 3) : '');
     c.innerHTML = `
@@ -216,8 +141,8 @@ function renderProjects() {
         <p>${p.description}</p>
         <div class="project-tags">${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
         <div class="project-links">
-          <a href="javascript:void(0)">Demo</a>
-          <a href="javascript:void(0)">Code</a>
+          <a href="#">Demo</a>
+          <a href="#">Code</a>
         </div>
       </div>`;
     projectsGrid.appendChild(c);
@@ -239,7 +164,7 @@ renderProjects();
 
 /* ===== Education timeline ===== */
 const TIMELINE = [
-  { year:'2022 — Present', title:'B.Sc. in Information & Communication Technology (BICT)', place:'University',
+  { year:'2022 — Present', title:'Information & Communication Technology (BICT)', place:'University',
     detail:'Core modules: Programming Fundamentals, Data Structures, Database Systems, Web Development, Software Engineering, Computer Networks and Project Management.',
     icon:'<path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>', tag:'Degree' },
   { year:'2022', title:'Started BICT — 2022 Batch', place:'Faculty of Technology',
@@ -253,10 +178,7 @@ const TIMELINE = [
     icon:'<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>', tag:'O/L' },
   { year:'2024', title:'Web Development Certification', place:'Online / Self-study',
     detail:'Completed focused coursework on modern React, Tailwind CSS and full-stack patterns.',
-    icon:'<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2"/>', tag:'Cert' },
-  { year:'2025', title:'Hackathon Finalist', place:'Inter-University Hackathon',
-    detail:'Finalist in a 24-hour hackathon building a civic-tech prototype with a team of four.',
-    icon:'<path d="M15.578 3.384 13.5 5.5l1.5 1.5 3-3.376A4.646 4.646 0 0 1 21.5 7c0 2.5-2 4.5-4.5 4.5-.5 0-1-.1-1.5-.3l-6.5 6.5c.2.5.3 1 .3 1.5a4.5 4.5 0 1 1-9 0c0-2.5 2-4.5 4.5-4.5.5 0 1 .1 1.5.3l6.5-6.5c-.2-.5-.3-1-.3-1.5a4.5 4.5 0 1 1 9 0"/>', tag:'Award' },
+    icon:'<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2"/>', tag:'Cert' }
 ];
 const tl = document.getElementById('timeline');
 tl.innerHTML = '<div class="timeline-line"></div>';
